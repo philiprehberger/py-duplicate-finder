@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "philiprehberger-duplicate-finder"
-version = "0.1.2"
+version = "0.1.3"
 description = "Content-hash duplicate file detection with two-pass efficiency"
 readme = "README.md"
 license = "MIT"
