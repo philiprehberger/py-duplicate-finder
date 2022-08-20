@@ -32,6 +32,33 @@ class DuplicateGroup:
     def wasted_bytes(self) -> int:
         return self.size * (self.count - 1)
 
+    def keep_newest(self) -> Path:
+        """Return the path with the most recent modification time."""
+        return max(self.paths, key=lambda p: p.stat().st_mtime)
+
+    def keep_shortest_path(self) -> Path:
+        """Return the path with the shortest string length (shallowest in directory tree)."""
+        return min(self.paths, key=lambda p: len(str(p)))
+
+    def deletable(self, strategy: str = "newest") -> list[Path]:
+        """Return all paths except the one suggested to keep.
+
+        Args:
+            strategy: Which file to keep. ``"newest"`` keeps the most recently
+                modified file; ``"shortest_path"`` keeps the file with the
+                shortest path string.
+
+        Returns:
+            List of paths safe to delete.
+        """
+        if strategy == "newest":
+            keep = self.keep_newest()
+        elif strategy == "shortest_path":
+            keep = self.keep_shortest_path()
+        else:
+            raise ValueError(f"Unknown strategy: {strategy!r}. Use 'newest' or 'shortest_path'.")
+        return [p for p in self.paths if p != keep]
+
 
 def _hash_file(
     path: Path,
