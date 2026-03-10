@@ -1,0 +1,58 @@
+# philiprehberger-duplicate-finder
+
+Content-hash duplicate file detection with two-pass efficiency.
+
+## Install
+
+```bash
+pip install philiprehberger-duplicate-finder
+```
+
+## Usage
+
+```python
+from philiprehberger_duplicate_finder import find_duplicates
+
+# Find duplicates in a directory
+groups = find_duplicates("~/Documents")
+
+for group in groups:
+    print(f"Size: {group.size} bytes, {group.count} copies, wasted: {group.wasted_bytes} bytes")
+    for path in group.paths:
+        print(f"  {path}")
+
+# Multiple directories with filters
+groups = find_duplicates(
+    paths=["~/Documents", "~/Downloads"],
+    min_size=1024,
+    extensions=[".pdf", ".jpg", ".png"],
+    algorithm="sha256",
+)
+
+# Progress tracking
+groups = find_duplicates(
+    "~/Pictures",
+    on_progress=lambda current, total: print(f"{current}/{total}"),
+)
+```
+
+## How It Works
+
+Two-pass approach for efficiency:
+1. Groups files by size (fast — eliminates most files immediately)
+2. Hashes only size-matched files (uses partial hashing for large files first)
+
+## Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `min_size` | 1 | Minimum file size in bytes |
+| `max_size` | None | Maximum file size in bytes |
+| `extensions` | None | Filter by extensions |
+| `algorithm` | "sha256" | Hash algorithm (sha256, md5, sha1) |
+| `recursive` | True | Scan subdirectories |
+| `follow_symlinks` | False | Follow symbolic links |
+
+## License
+
+MIT
