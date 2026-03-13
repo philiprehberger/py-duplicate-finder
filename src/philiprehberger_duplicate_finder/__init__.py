@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import fnmatch
 import hashlib
 import os
 from collections import defaultdict
@@ -67,6 +68,7 @@ def find_duplicates(
     min_size: int = 1,
     max_size: int | None = None,
     extensions: list[str] | None = None,
+    exclude_patterns: list[str] | None = None,
     algorithm: HashAlgorithm = "sha256",
     recursive: bool = True,
     follow_symlinks: bool = False,
@@ -83,6 +85,7 @@ def find_duplicates(
         min_size: Minimum file size in bytes to consider.
         max_size: Maximum file size in bytes to consider.
         extensions: Only consider files with these extensions (e.g., [".jpg", ".png"]).
+        exclude_patterns: Directory/file name patterns to skip (e.g., [".git", "node_modules"]).
         algorithm: Hash algorithm to use.
         recursive: Whether to scan subdirectories.
         follow_symlinks: Whether to follow symbolic links.
@@ -101,6 +104,7 @@ def find_duplicates(
 
     # Collect all files
     all_files: list[Path] = []
+    seen_inodes: set[tuple[int, int]] = set()
     for p in paths:
         root = Path(p).expanduser().resolve()
         if not root.is_dir():
@@ -111,12 +115,24 @@ def find_duplicates(
                 continue
             if not follow_symlinks and fp.is_symlink():
                 continue
+            if exclude_patterns and any(
+                fnmatch.fnmatch(part, pat)
+                for part in fp.parts
+                for pat in exclude_patterns
+            ):
+                continue
             if ext_set and fp.suffix.lower() not in ext_set:
                 continue
             try:
-                size = fp.stat().st_size
+                stat = fp.stat()
+                size = stat.st_size
             except OSError:
                 continue
+            # Skip hard links to already-seen files
+            inode_key = (stat.st_dev, stat.st_ino)
+            if inode_key in seen_inodes:
+                continue
+            seen_inodes.add(inode_key)
             if size < min_size:
                 continue
             if max_size is not None and size > max_size:

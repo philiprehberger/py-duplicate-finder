@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+- Add `exclude_patterns` parameter to skip directories like `.git` and `node_modules`
+- Detect and skip hard links to avoid false duplicates
+- Expand test suite with 8 new tests (19 total)
+
 ## 0.1.1
 
 - Add project URLs to pyproject.toml

@@ -49,9 +49,12 @@ Two-pass approach for efficiency:
 | `min_size` | 1 | Minimum file size in bytes |
 | `max_size` | None | Maximum file size in bytes |
 | `extensions` | None | Filter by extensions |
+| `exclude_patterns` | None | Directory/file patterns to skip (e.g., `[".git", "node_modules"]`) |
 | `algorithm` | "sha256" | Hash algorithm (sha256, md5, sha1) |
 | `recursive` | True | Scan subdirectories |
 | `follow_symlinks` | False | Follow symbolic links |
+
+Hard links to the same file are automatically detected and excluded from duplicate results.
 
 ## License
 
