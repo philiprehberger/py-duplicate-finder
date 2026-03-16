@@ -53,6 +53,14 @@ Two-pass approach for efficiency:
 | `recursive` | True | Scan subdirectories |
 | `follow_symlinks` | False | Follow symbolic links |
 
+
+## Development
+
+```bash
+pip install -e .
+python -m pytest tests/ -v
+```
+
 ## License
 
 MIT
