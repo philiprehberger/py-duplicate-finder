@@ -2,7 +2,7 @@
 
 Content-hash duplicate file detection with two-pass efficiency.
 
-## Install
+## Installation
 
 ```bash
 pip install philiprehberger-duplicate-finder
@@ -53,6 +53,13 @@ Two-pass approach for efficiency:
 | `recursive` | True | Scan subdirectories |
 | `follow_symlinks` | False | Follow symbolic links |
 
+
+## API
+
+| Function / Class | Description |
+|------------------|-------------|
+| `find_duplicates(paths, min_size, max_size, extensions, algorithm, recursive, follow_symlinks, on_progress)` | Find duplicate files using a two-pass size-then-hash approach |
+| `DuplicateGroup` | A group of duplicate files with `paths`, `size`, `hash`, `count`, and `wasted_bytes` |
 
 ## Development
 
