@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "philiprehberger-duplicate-finder"
-version = "0.2.0"
+version = "0.2.1"
 description = "Content-hash duplicate file detection with two-pass efficiency"
 readme = "README.md"
 license = "MIT"
@@ -24,3 +24,9 @@ Changelog = "https://github.com/philiprehberger/py-duplicate-finder/blob/main/CH
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/philiprehberger_duplicate_finder"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+strict = true
