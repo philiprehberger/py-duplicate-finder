@@ -1,8 +1,12 @@
 # philiprehberger-duplicate-finder
 
+[![Tests](https://github.com/philiprehberger/py-duplicate-finder/actions/workflows/publish.yml/badge.svg)](https://github.com/philiprehberger/py-duplicate-finder/actions/workflows/publish.yml)
+[![PyPI version](https://img.shields.io/pypi/v/philiprehberger-duplicate-finder.svg)](https://pypi.org/project/philiprehberger-duplicate-finder/)
+[![License](https://img.shields.io/github/license/philiprehberger/py-duplicate-finder)](LICENSE)
+
 Content-hash duplicate file detection with two-pass efficiency.
 
-## Install
+## Installation
 
 ```bash
 pip install philiprehberger-duplicate-finder
@@ -36,13 +40,19 @@ groups = find_duplicates(
 )
 ```
 
-## How It Works
+### How it works
 
 Two-pass approach for efficiency:
 1. Groups files by size (fast — eliminates most files immediately)
 2. Hashes only size-matched files (uses partial hashing for large files first)
 
-## Options
+Hard links to the same file are automatically detected and excluded from duplicate results.
+
+## API
+
+| Function / Class | Description |
+|------------------|-------------|
+| `find_duplicates(paths, *, min_size, max_size, extensions, exclude_patterns, algorithm, recursive, follow_symlinks, on_progress)` | Scan directories for duplicate files and return groups |
 
 | Option | Default | Description |
 |--------|---------|-------------|
@@ -54,7 +64,12 @@ Two-pass approach for efficiency:
 | `recursive` | True | Scan subdirectories |
 | `follow_symlinks` | False | Follow symbolic links |
 
-Hard links to the same file are automatically detected and excluded from duplicate results.
+## Development
+
+```bash
+pip install -e .
+python -m pytest tests/ -v
+```
 
 ## License
 
